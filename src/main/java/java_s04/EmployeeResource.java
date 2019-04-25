@@ -53,6 +53,7 @@ public class EmployeeResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Employee findById(@PathParam("id") int id) {
 		return empDao.findById(id);
+
 	}
 
 	/**
