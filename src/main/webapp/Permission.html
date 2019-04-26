@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8">
+		<title>部署データベース管理ページ</title>
+		<link rel="stylesheet" href="css/postStyle.css">
+	</head>
+	<body>
+		<div class="main clearfix">
+			<div id="list">
+				<p>経費一覧:</p>
+
+				<div id="posts"></div>
+
+
+				<div id="insertBlock">
+					<button type="button" id="newPost">経費追加</button>
+				</div>
+
+			</div>
+
+			<div id="detail">
+				<p>経費詳細データ：</p>
+    			<form id="postForm">
+    				<div class="error"></div>
+    				<div>
+			            <label for="name">ID:</label>
+    	    		    <input type="text" id="postId" disabled>
+        		    </div>
+
+					<div>
+			            <label for="name">名前:</label>
+    	    		    <input type="text" maxlength="40" id="name" required>
+    	    		</div>
+
+        			<button id="savePost">保存</button>
+			    </form>
+			</div>
+		</div>
+
+		<script src="js/jquery-3.3.1.min.js"></script>
+		<script src="js/Permission.js"></script>
+
+	</body>
+</html>

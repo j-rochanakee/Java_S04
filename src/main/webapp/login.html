@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8">
+		<title>Login Page</title>
+		<link rel="stylesheet" href="css/postStyle.css">
+	</head>
+	<body>
+		<div class="main clearfix">
+			<div id="login">
+				<p>あなたのIDとパスワードを入力してください：</p>
+    			<form id="loginForm" action=""  enctype="multipart/form-data">
+    				<div class="error"></div>
+    				<div>
+			            <label for="name">ID:</label>
+    	    		    <input type="text" id="username" name="username" required>
+        		    </div>
+
+					<div>
+			            <label for="name">Password:</label>
+    	    		    <input type="text" maxlength="40" id="password" name="password" required>
+    	    		</div>
+
+        			<button type="button" id="loginButton">ログイン</button>
+			    </form>
+			</div>
+		</div>
+
+<!--
+		<script src="js/jquery-3.3.1.min.js"></script>
+ -->
+		<script src="https://code.jquery.com/jquery-3.4.0.js" integrity="sha256-DYZMCC8HTC+QDr5QNaIcfR7VSPtcISykd+6eSmBW5qo=" crossorigin="anonymous"></script>
+		<script src="js/login.js"></script>
+
+	</body>
+</html>
