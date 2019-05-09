@@ -110,7 +110,8 @@ public class EmployeeDAO {
 			return employee;
 		}
 
-		try (PreparedStatement statement = connection.prepareStatement(INSERT_QUERY, new String[] { "ID" });) {
+		String[] str_list = { "ID" };
+		try (PreparedStatement statement = connection.prepareStatement(INSERT_QUERY, str_list);) {
 			// INSERT実行
 			setParameter(statement, employee, false);
 			statement.executeUpdate();

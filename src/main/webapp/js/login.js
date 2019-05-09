@@ -27,7 +27,7 @@ function login(){
 				sessionStorage.setItem("username",json.username);
 				sessionStorage.setItem("type",json.type);
 				alert("username = " + sessionStorage.getItem("username")+ "type =" + sessionStorage.getItem("type") );
-				window.open(menu.html);
+				window.open('menu.html');
 				$('#password').val('');
 			}
 			else{

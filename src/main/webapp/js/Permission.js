@@ -1,0 +1,171 @@
+'use strict';
+
+var rootUrl = "/java_s04/api/v1.1/Permission";
+
+
+initPage();
+
+$('#savePost').click(function() {
+	$('.error').children().remove();
+	if ($('#title').val() === '') {
+		$('.error').append('<div>タイトルは必須入力です。</div>');
+	}
+	if ($('#payAt').val() === '') {
+		$('.error').append('<div>支払先は必須入力です。</div>');
+	}
+	if ($('#money').val() === '') {
+		$('.error').append('<div>金額は必須入力です。</div>');
+	}
+
+	var id = $('#id').val()
+	if (id === '')
+		addEmployee();
+	else
+		updateEmployee(id);
+	return false;
+})
+
+
+
+$('#newPost').click(function() {
+	renderDetails({});
+});
+
+
+function initPage() {
+	findAll();
+}
+
+function findAll() {
+	var type = sessionStorage.getItem("type");
+	var username = sessionStorage.getItem("username");
+
+	console.log('findAll start.')
+	$.ajax({
+		type : "GET",
+		url : rootUrl + '?username=' + username + '&type=' + type,
+		dataType : "json",
+		success : renderTable
+	});
+}
+
+
+
+function addRequest() {
+	console.log('addEmployee start');
+
+	var fd = new FormData(document.getElementById("postForm"));
+	fd.append('username', sessionStorage.getItem("username"));
+
+	$.ajax({
+		url : rootUrl,
+		type : "POST",
+		data : fd,
+		contentType : false,
+		processData : false,
+		dataType : "json",
+		success : function(data, textStatus, jqXHR) {
+			alert('経費申請の追加に成功しました');
+			findAll();
+			renderDetails(data);
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+			alert('経費申請の追加に失敗しました');
+		}
+	})
+}
+
+function updatePermission(id) {
+	console.log('updatePermission start');
+
+	var fd = new FormData(document.getElementById("postForm"));
+	fd.append('username', sessionStorage.getItem("username"));
+
+	$.ajax({
+		url : rootUrl + '/' + id,
+		type : "PUT",
+		data :  fd ,
+		contentType : false,
+		processData : false,
+		dataType : "json",
+		success : function(data, textStatus, jqXHR) {
+			alert('経費申請の更新に成功しました');
+			findAll();
+			renderDetails(data);
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+			alert('経費申請の更新に失敗しました');
+		}
+	})
+}
+
+function deleteById(id) {
+	console.log('delete start - id:' + id);
+	$.ajax({
+		type : "DELETE",
+		url : rootUrl + '/' + id,
+		success : function() {
+			alert('経費申請の削除に成功しました');
+			findAll();
+			renderDetails({});
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+			alert('経費申請の削除に失敗しました');
+		}
+	});
+}
+
+function renderTable(data) {
+	var headerRow = '<tr><th>申請ID</th><th>申請日</th><th>更新日</th><th>申請者</th><th>タイトル</th><th>金額</th><th>ステータス</th><th></th></tr>';
+
+	$('#posts').children().remove();
+
+	if (data.length === 0) {
+		$('#posts').append('<p>現在データが存在していません。</p>')
+	} else {
+		var table = $('<table>').attr('border', 1);
+		table.append(headerRow);
+
+		$.each(data, function(permission) {
+			var row = $('<tr>');
+			row.append($('<td>').text(permission.id));
+			row.append($('<td>').text(permission.RequestedDate));
+			row.append($('<td>').text(permission.UpdatedDate));
+			row.append($('<td>').text(permission.ReqPersonId));
+			row.append($('<td>').text(permission.title));
+			row.append($('<td>').text(permission.money));
+			if(permission.status == 1){
+			row.append($('<td>').text("申請中"));
+			}
+			else if(permission.status == 2){
+			row.append($('<td>').text("承認"));
+			}
+			else {
+			row.append($('<td>').text("却下"));
+			}
+
+			row.append($('<td>').append(
+					$('<button>').text("詳細").attr("type","button").attr("onclick", "findById("+employee.id+')')
+				));
+
+			table.append(row);
+		});
+
+		$('#posts').append(table);
+	}
+}
+
+function renderDetails(permission) {
+	$('.error').text('');
+	$('#postId').val(permission.id);
+	$('#created_date').val(permission.RequestedDate);
+	$('#updated_date').val(permission.UpdatedDate);
+	$('#request_person').val(permission.ReqPersonId);
+	$('#title').val(permission.title);
+	$('#payAt').val(permission.payAt);
+	$('#money').val(permission.money);
+	$('#status').val(permission.status);
+	$('#update_person').val(permission.UpdatePersonId);
+}
+
+

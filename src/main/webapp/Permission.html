@@ -24,14 +24,50 @@
     			<form id="postForm">
     				<div class="error"></div>
     				<div>
-			            <label for="name">ID:</label>
+			            <label for="id">ID:</label>
     	    		    <input type="text" id="postId" disabled>
         		    </div>
 
 					<div>
-			            <label for="name">名前:</label>
-    	    		    <input type="text" maxlength="40" id="name" required>
+			            <label for="created_date">申請日:</label>
+    	    		    <input type="text" id="created_date" disabled>
     	    		</div>
+
+    	    		<div>
+			            <label for="updated_date">更新日:</label>
+    	    		    <input type="text" id="updated_date" disabled>
+    	    		</div>
+
+    	    		<div>
+			            <label for="request_person">申請者:</label>
+    	    		    <input type="text" id="request_person" disabled>
+    	    		</div>
+
+    	       		<div>
+			            <label for="title">タイトル:</label>
+    	    		    <input type="text" id="title">
+    	    		</div>
+
+    	       		<div>
+			            <label for="payAt">支払先:</label>
+    	    		    <input type="text" id="payAt">
+    	    		</div>
+
+    	    		<div>
+			            <label for="money">金額:</label>
+    	    		    <input type="text" id="money">
+    	    		</div>
+
+    	       		<div>
+			            <label for="status">ステータス:</label>
+    	    		    <input type="text" id="status" disabled>
+    	    		</div>
+
+        	   		<div>
+			            <label for="update_person">更新者:</label>
+    	    		    <input type="text" id="update_person" disabled>
+    	    		</div>
+
 
         			<button id="savePost">保存</button>
 			    </form>
