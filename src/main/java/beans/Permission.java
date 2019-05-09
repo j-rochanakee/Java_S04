@@ -14,7 +14,7 @@ public class Permission {
 	private String RequestedDate;
 	private String UpdatedDate;
 	private String reason;
-
+	private String ReqPersonType;
 
 
 
@@ -105,6 +105,14 @@ public class Permission {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getReqPersonType() {
+		return ReqPersonType;
+	}
+
+	public void setReqPersonType(String reqPersonType) {
+		ReqPersonType = reqPersonType;
 	}
 
 

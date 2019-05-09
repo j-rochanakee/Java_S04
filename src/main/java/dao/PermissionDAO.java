@@ -34,8 +34,8 @@ public class PermissionDAO {
 			" and request_person = ?" +
 			" or MS_USER.USER_TYPE < ? order by ID" ;
 
-	private static final String SELECT_BY_ID_QUERY = "select ID,CREATED_DATE,UPDATED_DATE,REQUEST_PERSON,TITLE,PAY_AT,AMOUNT_OF_MONEY,STATUS,UPDATED_PERSON" +
-			" from BUDGET_REQ where ID = ?";
+	private static final String SELECT_BY_ID_QUERY = "select ID,CREATED_DATE,UPDATED_DATE,REQUEST_PERSON,TITLE,PAY_AT,AMOUNT_OF_MONEY,STATUS,UPDATED_PERSON,USER_TYPE" +
+			" from BUDGET_REQ,MS_USER  where ID = ? and USER_CD=BUDGET_REQ.REQUEST_PERSON ";
 
 
 	public List<Permission> findByParam(String username, String type) {
@@ -191,6 +191,7 @@ public class PermissionDAO {
 		if (isDetail){
 			result.setPayAt(rs.getString("PAY_AT"));
 			result.setUpdatePersonId(rs.getString("UPDATED_PERSON"));
+			result.setReqPersonType(rs.getString("USER_TYPE"));
 		}
 
 

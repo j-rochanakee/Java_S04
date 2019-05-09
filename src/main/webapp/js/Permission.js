@@ -63,6 +63,12 @@ function findById(id) {
 		success : function(data) {
 			console.log('findById success: ' + data.name);
 			renderDetails(data)
+			if(data.type == type){
+
+			}
+			else {
+
+			}
 		}
 	});
 }
