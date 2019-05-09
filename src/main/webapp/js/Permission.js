@@ -7,6 +7,7 @@ initPage();
 
 $('#savePost').click(function() {
 	$('.error').children().remove();
+
 	if ($('#title').val() === '') {
 		$('.error').append('<div>タイトルは必須入力です。</div>');
 	}
@@ -17,11 +18,11 @@ $('#savePost').click(function() {
 		$('.error').append('<div>金額は必須入力です。</div>');
 	}
 
-	var id = $('#id').val()
+	var id = $('#postId').val();
 	if (id === '')
-		addEmployee();
+		addRequest();
 	else
-		updateEmployee(id);
+		updatePermission(id);
 	return false;
 })
 
@@ -45,14 +46,29 @@ function findAll() {
 		type : "GET",
 		url : rootUrl + '?username=' + username + '&type=' + type,
 		dataType : "json",
-		success : renderTable
+		success : function(data) {
+			renderTable(data);
+		}
 	});
 }
 
+function findById(id) {
+	console.log('findByID start - id:' + id);
+	var type = sessionStorage.getItem("type");//my type
 
+	$.ajax({
+		type : "GET",
+		url : rootUrl + '/' + id,
+		dataType : "json",
+		success : function(data) {
+			console.log('findById success: ' + data.name);
+			renderDetails(data)
+		}
+	});
+}
 
 function addRequest() {
-	console.log('addEmployee start');
+	console.log('addRequest start');
 
 	var fd = new FormData(document.getElementById("postForm"));
 	fd.append('username', sessionStorage.getItem("username"));
@@ -61,8 +77,8 @@ function addRequest() {
 		url : rootUrl,
 		type : "POST",
 		data : fd,
-		contentType : false,
-		processData : false,
+		contentType : false, //what does it mean
+		processData : false, //what does it mean
 		dataType : "json",
 		success : function(data, textStatus, jqXHR) {
 			alert('経費申請の追加に成功しました');
@@ -126,12 +142,12 @@ function renderTable(data) {
 		var table = $('<table>').attr('border', 1);
 		table.append(headerRow);
 
-		$.each(data, function(permission) {
+		$.each(data, function(index,permission) {
 			var row = $('<tr>');
 			row.append($('<td>').text(permission.id));
-			row.append($('<td>').text(permission.RequestedDate));
-			row.append($('<td>').text(permission.UpdatedDate));
-			row.append($('<td>').text(permission.ReqPersonId));
+			row.append($('<td>').text(permission.requestedDate));
+			row.append($('<td>').text(permission.updatedDate));
+			row.append($('<td>').text(permission.reqPersonId));
 			row.append($('<td>').text(permission.title));
 			row.append($('<td>').text(permission.money));
 			if(permission.status == 1){
@@ -145,7 +161,7 @@ function renderTable(data) {
 			}
 
 			row.append($('<td>').append(
-					$('<button>').text("詳細").attr("type","button").attr("onclick", "findById("+employee.id+')')
+					$('<button>').text("詳細").attr("type","button").attr("onclick", "findById("+permission.id+')')
 				));
 
 			table.append(row);
@@ -158,14 +174,14 @@ function renderTable(data) {
 function renderDetails(permission) {
 	$('.error').text('');
 	$('#postId').val(permission.id);
-	$('#created_date').val(permission.RequestedDate);
-	$('#updated_date').val(permission.UpdatedDate);
-	$('#request_person').val(permission.ReqPersonId);
+	$('#created_date').val(permission.requestedDate);
+	$('#updated_date').val(permission.updatedDate);
+	$('#request_person').val(permission.reqPersonId);
 	$('#title').val(permission.title);
 	$('#payAt').val(permission.payAt);
 	$('#money').val(permission.money);
 	$('#status').val(permission.status);
-	$('#update_person').val(permission.UpdatePersonId);
+	$('#update_person').val(permission.updatePersonId);
 }
 
 

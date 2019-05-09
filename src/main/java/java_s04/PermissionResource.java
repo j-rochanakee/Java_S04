@@ -31,7 +31,12 @@ public class PermissionResource {
 		return PerDao.findByParam(id,type);
 	}
 
+	@GET
+	@Path("{id}")
+	public Permission findById(@PathParam("id") int id) {
+		return PerDao.findById(id);
 
+	}
 	/**
 	 * 指定した従業員情報を登録する。
 	 *

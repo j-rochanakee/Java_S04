@@ -23,7 +23,7 @@ public class PermissionDAO {
 
 
 	private static final String UPDATE_QUERY = "UPDATE BUDGET_REQ "
-							+"SET CREATED_DATE=?,UPDATED_DATEE=?,REQUEST_PERSON=?,TITLE=?,PAY_AT=?,AMOUNT_OF_MONEY=?,STATUS=?,"
+							+"SET CREATED_DATE=?,UPDATED_DATE=?,REQUEST_PERSON=?,TITLE=?,PAY_AT=?,AMOUNT_OF_MONEY=?,STATUS=?,"
 							+"UPDATED_PERSON=? WHERE ID = ?";
 
 	private static final String DELETE_QUERY = "DELETE FROM BUDGET_REQ WHERE ID = ?";
@@ -32,8 +32,10 @@ public class PermissionDAO {
 			" from BUDGET_REQ,MS_USER" +
 			" where MS_USER.USER_CD = BUDGET_REQ.REQUEST_PERSON" +
 			" and request_person = ?" +
-			" or MS_USER.USER_TYPE < ?" ;
+			" or MS_USER.USER_TYPE < ? order by ID" ;
 
+	private static final String SELECT_BY_ID_QUERY = "select ID,CREATED_DATE,UPDATED_DATE,REQUEST_PERSON,TITLE,PAY_AT,AMOUNT_OF_MONEY,STATUS,UPDATED_PERSON" +
+			" from BUDGET_REQ where ID = ?";
 
 
 	public List<Permission> findByParam(String username, String type) {
@@ -44,8 +46,6 @@ public class PermissionDAO {
 			return result;
 		}
 
-		System.out.println(username+type);
-
 
 		try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_QUERY)) {
 			statement.setString(1, username);
@@ -55,7 +55,32 @@ public class PermissionDAO {
 
 			while (rs.next()) {
 
-				result.add(processRow(rs));
+				result.add(processRow(rs,false));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionProvider.close(connection);
+		}
+
+		return result;
+	}
+
+	public Permission findById(int id) {
+		Permission result = null;
+
+		Connection connection = ConnectionProvider.getConnection();
+		if (connection == null) {
+			return result;
+		}
+
+		try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
+			statement.setInt(1, id);
+
+			ResultSet rs = statement.executeQuery();
+
+			if (rs.next()) {
+				result = processRow(rs,true);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -67,14 +92,12 @@ public class PermissionDAO {
 	}
 
 
-
-
 	public Permission create(Permission permission) {
 		Connection connection = ConnectionProvider.getConnection();
 		if (connection == null) {
 			return permission;
 		}
-		String[] str_id =  { "ID" };
+		String[] str_id =  { "ID" };//why is it neccessary
 		try (PreparedStatement statement = connection.prepareStatement(INSERT_QUERY,str_id)) {
 			// INSERT実行
 			setParameter(statement, permission, false);
@@ -154,19 +177,22 @@ public class PermissionDAO {
 	 * @return 検索結果を収めたオブジェクト
 	 * @throws SQLException 検索結果取得中に何らかの問題が発生した場合に送出される。
 	 */
-	private Permission processRow(ResultSet rs) throws SQLException {
+	private Permission processRow(ResultSet rs,boolean isDetail) throws SQLException {
 		Permission result = new Permission();
 
-		// Employee本体の再現
+
 		result.setId(rs.getInt("ID"));
-		result.setUpdatedDate(rs.getString("UPDATED_DATE"));
-		result.setRequestedDate(rs.getString("CREATED_DATE"));
+		result.setUpdatedDate(rs.getString("UPDATED_DATE").substring(0,10));
+		result.setRequestedDate(rs.getString("CREATED_DATE").substring(0,10));
 		result.setReqPersonId(rs.getString("REQUEST_PERSON"));
 		result.setTitle(rs.getString("TITLE"));
-		result.setPayAt(rs.getString("PAY_AT"));
 		result.setMoney(rs.getInt("AMOUNT_OF_MONEY"));
 		result.setStatus(rs.getInt("STATUS"));
-		result.setUpdatePersonId(rs.getString("UPDATED_PERSON"));
+		if (isDetail){
+			result.setPayAt(rs.getString("PAY_AT"));
+			result.setUpdatePersonId(rs.getString("UPDATED_PERSON"));
+		}
+
 
 		return result;
 	}
