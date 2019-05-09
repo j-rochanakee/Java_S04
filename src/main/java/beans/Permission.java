@@ -27,6 +27,8 @@ public class Permission {
         sb.append(",");
         sb.append(this.getUpdatePersonId());
         sb.append(",");
+        sb.append(this.getReqPersonType());
+        sb.append(",");
         sb.append(this.getTitle());
         sb.append(",");
         sb.append(this.getPayAt());

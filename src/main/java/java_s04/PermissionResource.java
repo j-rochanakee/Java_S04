@@ -63,6 +63,8 @@ public class PermissionResource {
 		return PerDao.create(permission);
 	}
 
+
+
 	/**
 	 * 指定した情報でDBを更新する。
 	 *
@@ -84,7 +86,9 @@ public class PermissionResource {
 		permission.setTitle(form.getField("title").getValue());
 		permission.setPayAt(form.getField("payAt").getValue());
 		permission.setMoney(Integer.parseInt(form.getField("money").getValue()));
-		permission.setStatus(1); //申請中
+
+		permission.setStatus(Integer.parseInt(form.getField("status").getValue()));
+
 		permission.setUpdatePersonId(form.getField("username").getValue());
 
 		return PerDao.update(permission);

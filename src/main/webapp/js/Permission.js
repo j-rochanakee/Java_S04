@@ -21,8 +21,18 @@ $('#savePost').click(function() {
 	var id = $('#postId').val();
 	if (id === '')
 		addRequest();
-	else
-		updatePermission(id);
+	else{
+		if($('#status').val() =='申請中'){
+			updatePermission(id,1);
+		}
+		else if(($('#status').val() =='承認')){
+			updatePermission(id,2);
+		}
+		else {
+			updatePermission(id,3);
+		}
+
+	}
 	return false;
 })
 
@@ -55,6 +65,7 @@ function findAll() {
 function findById(id) {
 	console.log('findByID start - id:' + id);
 	var type = sessionStorage.getItem("type");//my type
+
 	$.ajax({
 		type : "GET",
 		url : rootUrl + '/' + id,
@@ -62,8 +73,11 @@ function findById(id) {
 		success : function(data) {
 			console.log('findById success: ' + data.name);
 			renderDetails(data)
-			if(data.type < type){
 
+			var buttonAdd = $('#AcceptOrDeny');
+			if(data.reqPersonType < type && data.status ==1) {
+				buttonAdd.append($('<button>').text("承認").attr("type","button").attr("onclick", "updatePermission("+data.id+',2)'));
+				buttonAdd.append($('<button>').text("却下").attr("type","button").attr("onclick", "updatePermission("+data.id+',3)'));
 			}
 			else {
 
@@ -71,6 +85,9 @@ function findById(id) {
 		}
 	});
 }
+
+
+
 
 function addRequest() {
 	console.log('addRequest start');
@@ -96,11 +113,12 @@ function addRequest() {
 	})
 }
 
-function updatePermission(id) {
+function updatePermission(id,status) {
 	console.log('updatePermission start');
 
 	var fd = new FormData(document.getElementById("postForm"));
 	fd.append('username', sessionStorage.getItem("username"));
+	fd.append('status',status);
 
 	$.ajax({
 		url : rootUrl + '/' + id,
@@ -185,7 +203,17 @@ function renderDetails(permission) {
 	$('#title').val(permission.title);
 	$('#payAt').val(permission.payAt);
 	$('#money').val(permission.money);
-	$('#status').val(permission.status);
+	if(permission.status == 3){
+		$('#status').val("却下");
+	}
+	else if(permission.status == 2){
+		$('#status').val("承認");
+	}
+	else if (permission.status == 1) {
+		$('#status').val("申請中");
+	}
+	else
+		$('#status').val("");
 	$('#update_person').val(permission.updatePersonId);
 }
 
