@@ -54,6 +54,7 @@ function findAll() {
 
 function findById(id) {
 	console.log('findByID start - id:' + id);
+	var type = sessionStorage.getItem("type");//my type
 	$.ajax({
 		type : "GET",
 		url : rootUrl + '/' + id,
@@ -61,6 +62,12 @@ function findById(id) {
 		success : function(data) {
 			console.log('findById success: ' + data.name);
 			renderDetails(data)
+			if(data.type < type){
+
+			}
+			else {
+
+			}
 		}
 	});
 }
