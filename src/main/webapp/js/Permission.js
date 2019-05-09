@@ -55,7 +55,7 @@ function findById(id) {
 	console.log('findByID start - id:' + id);
 	$.ajax({
 		type : "GET",
-		url : rootUrl + '?id=' + id,
+		url : rootUrl + '/' + id,
 		dataType : "json",
 		success : function(data) {
 			console.log('findById success: ' + data.name);
@@ -171,14 +171,14 @@ function renderTable(data) {
 function renderDetails(permission) {
 	$('.error').text('');
 	$('#postId').val(permission.id);
-	$('#created_date').val(permission.RequestedDate);
-	$('#updated_date').val(permission.UpdatedDate);
-	$('#request_person').val(permission.ReqPersonId);
+	$('#created_date').val(permission.requestedDate);
+	$('#updated_date').val(permission.updatedDate);
+	$('#request_person').val(permission.reqPersonId);
 	$('#title').val(permission.title);
 	$('#payAt').val(permission.payAt);
 	$('#money').val(permission.money);
 	$('#status').val(permission.status);
-	$('#update_person').val(permission.UpdatePersonId);
+	$('#update_person').val(permission.updatePersonId);
 }
 
 
