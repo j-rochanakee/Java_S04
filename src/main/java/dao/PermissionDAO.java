@@ -23,7 +23,7 @@ public class PermissionDAO {
 
 
 	private static final String UPDATE_QUERY = "UPDATE BUDGET_REQ "
-							+"SET CREATED_DATE=?,UPDATED_DATEE=?,REQUEST_PERSON=?,TITLE=?,PAY_AT=?,AMOUNT_OF_MONEY=?,STATUS=?,"
+							+"SET CREATED_DATE=?,UPDATED_DATE=?,REQUEST_PERSON=?,TITLE=?,PAY_AT=?,AMOUNT_OF_MONEY=?,STATUS=?,"
 							+"UPDATED_PERSON=? WHERE ID = ?";
 
 	private static final String DELETE_QUERY = "DELETE FROM BUDGET_REQ WHERE ID = ?";
@@ -32,7 +32,7 @@ public class PermissionDAO {
 			" from BUDGET_REQ,MS_USER" +
 			" where MS_USER.USER_CD = BUDGET_REQ.REQUEST_PERSON" +
 			" and request_person = ?" +
-			" or MS_USER.USER_TYPE < ?" ;
+			" or MS_USER.USER_TYPE < ? order by ID" ;
 
 	private static final String SELECT_BY_ID_QUERY = "select ID,CREATED_DATE,UPDATED_DATE,REQUEST_PERSON,TITLE,PAY_AT,AMOUNT_OF_MONEY,STATUS,UPDATED_PERSON" +
 			" from BUDGET_REQ where ID = ?";
@@ -97,7 +97,7 @@ public class PermissionDAO {
 		if (connection == null) {
 			return permission;
 		}
-		String[] str_id =  { "ID" };
+		String[] str_id =  { "ID" };//why is it neccessary
 		try (PreparedStatement statement = connection.prepareStatement(INSERT_QUERY,str_id)) {
 			// INSERT実行
 			setParameter(statement, permission, false);

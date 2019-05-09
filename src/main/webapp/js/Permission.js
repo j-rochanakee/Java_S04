@@ -7,6 +7,7 @@ initPage();
 
 $('#savePost').click(function() {
 	$('.error').children().remove();
+
 	if ($('#title').val() === '') {
 		$('.error').append('<div>タイトルは必須入力です。</div>');
 	}
@@ -17,11 +18,11 @@ $('#savePost').click(function() {
 		$('.error').append('<div>金額は必須入力です。</div>');
 	}
 
-	var id = $('#id').val()
+	var id = $('#postId').val();
 	if (id === '')
-		addEmployee();
+		addRequest();
 	else
-		updateEmployee(id);
+		updatePermission(id);
 	return false;
 })
 
@@ -65,7 +66,7 @@ function findById(id) {
 }
 
 function addRequest() {
-	console.log('addEmployee start');
+	console.log('addRequest start');
 
 	var fd = new FormData(document.getElementById("postForm"));
 	fd.append('username', sessionStorage.getItem("username"));
@@ -74,8 +75,8 @@ function addRequest() {
 		url : rootUrl,
 		type : "POST",
 		data : fd,
-		contentType : false,
-		processData : false,
+		contentType : false, //what does it mean
+		processData : false, //what does it mean
 		dataType : "json",
 		success : function(data, textStatus, jqXHR) {
 			alert('経費申請の追加に成功しました');
